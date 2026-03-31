@@ -8,10 +8,17 @@ MAX_TOKENS = 1024
 
 
 def get_openai_client() -> OpenAI:
-    api_key = os.getenv("OPENAI_API_KEY")
+    # Try Streamlit secrets.toml first, then fall back to .env
+    try:
+        import streamlit as st
+        api_key = st.secrets.get("OPENAI_API_KEY")
+    except Exception:
+        api_key = None
+    if not api_key:
+        api_key = os.getenv("OPENAI_API_KEY")
     if not api_key or api_key == "your-api-key-here":
         raise ValueError(
-            "Please set your OPENAI_API_KEY in the .env file. "
+            "Please set your OPENAI_API_KEY in .streamlit/secrets.toml or .env file. "
             "You can get one at https://platform.openai.com/api-keys"
         )
     return OpenAI(api_key=api_key)
