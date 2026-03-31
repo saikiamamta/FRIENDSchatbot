@@ -1,8 +1,9 @@
+import os
 import streamlit as st
 from dotenv import load_dotenv
 from chatbot import get_openai_client, get_response
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 st.set_page_config(
     page_title="Friends Chatbot",
