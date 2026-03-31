@@ -2,7 +2,7 @@ import os
 from openai import OpenAI, APIError, AuthenticationError
 from system_prompt import SYSTEM_PROMPT
 
-MODEL = "gpt-4o"
+MODEL = "gpt-4o-mini"
 TEMPERATURE = 0.7
 MAX_TOKENS = 1024
 
