@@ -3,7 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from chatbot import get_openai_client, get_response
 
-load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"), override=True)
 
 st.set_page_config(
     page_title="Friends Chatbot",
@@ -138,12 +138,11 @@ with st.sidebar:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if "client" not in st.session_state:
-    try:
-        st.session_state.client = get_openai_client()
-    except ValueError as e:
-        st.error(str(e))
-        st.stop()
+try:
+    client = get_openai_client()
+except ValueError as e:
+    st.error(str(e))
+    st.stop()
 
 # Landing page with character caricatures (shown only when chat is empty)
 if not st.session_state.messages:
@@ -217,7 +216,7 @@ if needs_response and st.session_state.messages[-1]["role"] == "user":
     with st.chat_message("assistant", avatar="☕"):
         with st.spinner("Thinking..."):
             response = get_response(
-                st.session_state.client,
+                client,
                 st.session_state.messages,
             )
         st.markdown(response)
